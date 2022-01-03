@@ -16,9 +16,36 @@ namespace ShortURL.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Shortener(string longURL)
+        {
+            if (!IsValidUri(longURL))
+            {
+                return RedirectToAction("InvalidURL");
+            }
+
+            if (longURL != null)
+            {
+                ViewBag.longURL = longURL;
+
+                return View();
+            }
+            else return RedirectToAction("Index");
+        }
+
+        public IActionResult InvalidURL()
         {
             return View();
+        }
+
+        public IActionResult ShortURLStats()
+        {
+            return View();
+        }
+
+        public bool IsValidUri(string uri)
+        {
+            Uri validatedUri;
+            return Uri.TryCreate(uri, UriKind.RelativeOrAbsolute, out validatedUri);
         }
     }
 }

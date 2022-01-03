@@ -1,0 +1,22 @@
+﻿@model string
+@{
+    ViewData["Title"] = "InvalidURL";
+}
+
+<body>
+    <section id="content">
+        <h1>An error occurred to generate the URL</h1>
+        <p>The <b>URL is not valid</b>, make sure the URL you tried to shorten is correct.</p>
+        <p>Possible errors:</p>
+        <ul>
+            <li class="list">Check if the domain is correct</li>
+            <li class="list">Check if the site is online</li>
+            <li class="list">Check the length of the url is not too small</li>
+            <li class="list">Check the address bars and punctuation</li>
+            <li class="list">The URL may have been blocked</li>
+            <li class="list">The url may have been reported</li>
+            <li class="list">Make sure the url does not contain spam</li>
+        </ul>
+        <p><a asp-action="Index"> Go back and try again</a></p>
+    </section>
+</body>
