@@ -1,25 +1,25 @@
 ﻿@{
     ViewData["Title"] = "HomePage";
 }
+<div class="jumbotron">
+    <div align="center">
+        <h1>Paste the URL to be shortened</h1>
+    </div>
 
-<div align="center">
-    <h1>Paste the URL to be shortened</h1>
-</div>
-
-<div style="display:flex;
+    <div style="display:flex;
 	justify-content: center;">
-    <form class="form-inline" action="~/Home/Shortener">
-        <div class="form-group mx-sm-3 mb-2">
-            <input type="text" name="longURL" class="form-control" id="inputPassword2" placeholder="Your long URL">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Create short URL</button>
-    </form>
+        <form class="form-inline" action="~/Home/Shortener">
+            <div class="form-group mx-sm-3 mb-2">
+                <input type="text" name="longURL" class="form-control" placeholder="Your long URL">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Create short URL</button>
+        </form>
+    </div>
 </div>
-
 <p>
     <b>Примечание:</b><br />
-<p>
-    Это реализация тестового задания по ASP.NET Core, которое я нашел на просторах интернета.<br />
+
+    Это реализация тестового задания по ASP.NET Core, которое я нашел на просторах интернета, чтобы попрактиковаться в работе с ASP.NET Core MVC.<br />
     Подробное описание задания вы можете найти здесь: <a href="https://github.com/GonarchX/ShortURL">Проект на GitHub</a>
-</p>
+
 </p>
