@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ShortURL.Models;
+using ShortURL.Services;
+using ShortURL.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,41 +13,58 @@ namespace ShortURL.Controllers
 {
     public class HomeController : Controller
     {
+        readonly IShortUrlService shortUrlService;
+
+        public HomeController(IShortUrlService _shortUrlService)
+        {
+            shortUrlService = _shortUrlService;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Shortener(string longURL)
+        //Creating the short URL and saving it to db
+        public async Task<IActionResult> ShortenedURL(string longUrl, int tokenLength)
         {
-            if (!IsValidUri(longURL))
+            if (!IsValidUri(longUrl))
             {
                 return RedirectToAction("InvalidURL");
             }
 
-            if (longURL != null)
-            {
-                ViewBag.longURL = longURL;
+            string token = await shortUrlService.GenerateNonDuplShortUrlAsync(tokenLength);
 
-                return View();
-            }
-            else return RedirectToAction("Index");
+            ViewBag.token = token;
+            ViewBag.longUrl = longUrl;
+
+            await shortUrlService.SaveShortUrlInfoAsync(
+                new ShortUrlInfo()
+                {
+                    Token = token,
+                    LongUrl = longUrl,
+                    CreateDate = DateTime.Now,
+                    ClickNum = 0
+                });
+
+            return View();
         }
 
-        public IActionResult InvalidURL()
+        /*public IActionResult RedirectByToken(string token)
+        {
+            return Redirect("");
+        }*/
+
+        public IActionResult InvalidUrl()
         {
             return View();
         }
 
-        public IActionResult ShortURLStats()
+        public IActionResult ShortUrlAllStats()
         {
-            return View();
+            return View(shortUrlService.GetAllShortUrls());
         }
 
-        public bool IsValidUri(string uri)
-        {
-            Uri validatedUri;
-            return Uri.TryCreate(uri, UriKind.RelativeOrAbsolute, out validatedUri);
-        }
+        public bool IsValidUri(string uri) => Uri.TryCreate(uri, UriKind.Absolute, out _);
     }
 }

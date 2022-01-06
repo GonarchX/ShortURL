@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShortURL.Models;
+using ShortURL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +27,14 @@ namespace ShortURL
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // getting connection string from configuration file 
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            // adding ShortURL contetxt as service in the application
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(connection));
+
+            services.AddScoped<IShortUrlService, ShortUrlService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +61,7 @@ namespace ShortURL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{token?}");
             });
         }
     }
