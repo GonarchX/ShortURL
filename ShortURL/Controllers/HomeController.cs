@@ -35,7 +35,7 @@ namespace ShortURL.Controllers
 
             string token = await shortUrlService.GenerateNonDuplTokenAsync(tokenLength);
                         
-            ViewBag.shortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/{HttpContext.Request.Path}/{token}";
+            ViewBag.shortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Home/RedirectByToken/{token}";
             ViewBag.token = token;
             ViewBag.longUrl = longUrl;
 
