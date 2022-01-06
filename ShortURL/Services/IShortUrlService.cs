@@ -6,16 +6,16 @@ namespace ShortURL.Services
 {
     public interface IShortUrlService
     {
-        public string GetShortUrlById(int id);
+        ShortUrlInfo GetShortUrlInfoByToken(string token);
 
-        string GetShortUrlByLongUrl(string LongUrl);
+        Task<IEnumerable<ShortUrlInfo>> GetAllShortUrlsAsync();
 
-        IEnumerable<ShortUrlInfo> GetAllShortUrls();
+        Task<string> GenerateNonDuplTokenAsync(int tokenLength);
 
-        Task<string> GenerateNonDuplShortUrlAsync(int shortUrlLength);
+        bool IsDuplicate(string token);
 
-        bool IsDuplicate(string shortUrl);
+        Task IncrementTokenClicksAsync(string token);
 
-        Task<bool> SaveShortUrlInfoAsync(ShortUrlInfo shortUrl);
+        Task<bool> SaveShortUrlInfoAsync(ShortUrlInfo token);
     }
 }

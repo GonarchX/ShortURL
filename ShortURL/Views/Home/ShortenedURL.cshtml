@@ -4,11 +4,12 @@
 <div class="jumbotron">
     <div align="center">
         <h2>Your shortened URL:</h2>
-        @ViewBag.shortUrl
-        <p>Long URL: <a href=@ViewBag.longURL>@ViewBag.longURL</a></p>
+        <p>Use this link to share</p>
+        <a asp-action="RedirectByToken" asp-route-token=@ViewBag.token>@ViewBag.shortUrl</a>
     </div>
 
     <p>
+         <p>Long URL: <a href=@ViewBag.longUrl>@ViewBag.longUrl</a></p>
         <a href="@Url.Action("Index", "Home")">Create other shortened URL.</a>
     </p>
 </div>

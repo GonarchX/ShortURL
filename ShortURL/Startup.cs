@@ -30,7 +30,7 @@ namespace ShortURL
 
             // getting connection string from configuration file 
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            // adding ShortURL contetxt as service in the application
+            // adding ShortURL context as service in the application
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
 
@@ -61,7 +61,14 @@ namespace ShortURL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{token?}");
+                    pattern: "{controller=Home}/{action=Index}");
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=RedirectByToken}/{token:minlength(7)}");
             });
         }
     }

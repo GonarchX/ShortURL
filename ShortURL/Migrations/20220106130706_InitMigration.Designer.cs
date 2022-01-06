@@ -10,7 +10,7 @@ using ShortURL.Models;
 namespace ShortURL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220106122513_InitMigration")]
+    [Migration("20220106130706_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

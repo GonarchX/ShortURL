@@ -18,14 +18,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var shortUrl in Model)
+                @foreach (var shortUrlInfo in Model)
                 {
                     <tr>
-                        <th>@shortUrl.Id</th>
-                        <td>@shortUrl.Token</td>
-                        <td>@shortUrl.LongUrl</td>
-                        <td>@shortUrl.CreateDate</td>
-                        <td>@shortUrl.ClickNum</td>
+                        <th>@shortUrlInfo.Id</th>
+                        <td><a asp-action="RedirectByToken" asp-route-token=@shortUrlInfo.Token>@shortUrlInfo.Token</a></td>
+                        <td>@shortUrlInfo.LongUrl</td>
+                        <td>@shortUrlInfo.CreateDate</td>
+                        <td>@shortUrlInfo.ClickNum</td>
                     </tr>
                 }
             </tbody>

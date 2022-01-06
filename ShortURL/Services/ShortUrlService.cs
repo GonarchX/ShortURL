@@ -15,30 +15,38 @@ namespace ShortURL.Services
             context = _context;
         }
 
-        public string GetShortUrlById(int id) => context.ShortUrlInfos.Find(id).Token;
+        #region IShortUrlService implementation
+        public ShortUrlInfo GetShortUrlInfoByToken(string token) =>
+            context.ShortUrlInfos.FirstOrDefault(x => x.Token == token);
 
-        public string GetShortUrlByLongUrl(string longUrl) => context.ShortUrlInfos.FirstOrDefault(x => x.LongUrl == longUrl)?.Token;
-
-        public IEnumerable<ShortUrlInfo> GetAllShortUrls() => context.ShortUrlInfos.ToList();
-
-        public bool IsDuplicate(string shortUrl) => context.ShortUrlInfos.FirstOrDefault(x => x.Token == shortUrl) != null;
+        public async Task<IEnumerable<ShortUrlInfo>> GetAllShortUrlsAsync()
+            => await Task.Run(() => context.ShortUrlInfos.ToList());
 
         /// <summary>
         /// Generate non duplicated short URL
         /// </summary>
-        public async Task<string> GenerateNonDuplShortUrlAsync(int shortUrlLength)
+        public async Task<string> GenerateNonDuplTokenAsync(int tokenLength)
         {
-            string shortURL = "";
+            string token = "";
 
             await Task.Run(() =>
             {
                 do
                 {
-                    shortURL = ShortUrlUtil.GenerateShortUrl(shortUrlLength);
-                } while (IsDuplicate(shortURL));
+                    token = ShortUrlUtil.GenerateShortUrl(tokenLength);
+                } while (IsDuplicate(token));
             });
 
-            return shortURL;
+            return token;
+        }
+
+        public bool IsDuplicate(string token)
+                => GetShortUrlInfoByToken(token) != null;
+
+        public async Task IncrementTokenClicksAsync(string token)
+        {
+            GetShortUrlInfoByToken(token).ClickNum++;
+            await context.SaveChangesAsync();
         }
 
         public async Task<bool> SaveShortUrlInfoAsync(ShortUrlInfo shortUrl)
@@ -49,5 +57,6 @@ namespace ShortURL.Services
             await context.SaveChangesAsync();
             return true;
         }
+        #endregion
     }
 }

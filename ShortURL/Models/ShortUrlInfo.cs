@@ -11,7 +11,7 @@ namespace ShortURL.Models
         public int Id { get; set; }
         
         //ShortURL
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         public string Token { get; set; }
         
         [Required]
