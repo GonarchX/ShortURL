@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ShortURL.Models.ShortUrlInfo>
+@{
+    ViewData["Title"] = "All Short URL Stats";
+}
+
+<h1>ShortURLStats</h1>
+
+<div class="modal-body">
+    <div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Token</th>
+                    <th scope="col">Long URL</th>
+                    <th scope="col">Date of creation</th>
+                    <th scope="col">Number of clicks</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var shortUrl in Model)
+                {
+                    <tr>
+                        <th>@shortUrl.Id</th>
+                        <td>@shortUrl.Token</td>
+                        <td>@shortUrl.LongUrl</td>
+                        <td>@shortUrl.CreateDate</td>
+                        <td>@shortUrl.ClickNum</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

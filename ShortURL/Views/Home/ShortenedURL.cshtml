@@ -1,9 +1,14 @@
-﻿@model string
-@{
-    ViewData["Title"] = "ShortenedURL";
+﻿@{
+    ViewData["Title"] = "Shortened URL";
 }
+<div class="jumbotron">
+    <div align="center">
+        <h2>Your shortened URL:</h2>
+        @ViewBag.shortUrl
+        <p>Long URL: <a href=@ViewBag.longURL>@ViewBag.longURL</a></p>
+    </div>
 
-<div align="center">
-    <h2>Your shortened URL:</h2>
-    @ViewBag.longURL
+    <p>
+        <a href="@Url.Action("Index", "Home")">Create other shortened URL.</a>
+    </p>
 </div>
