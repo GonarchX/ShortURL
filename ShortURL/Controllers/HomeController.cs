@@ -34,7 +34,7 @@ namespace ShortURL.Controllers
             }
 
             string token = await shortUrlService.GenerateNonDuplTokenAsync(tokenLength);
-                        
+
             ViewBag.shortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Home/RedirectByToken/{token}";
             ViewBag.token = token;
             ViewBag.longUrl = longUrl;
@@ -57,7 +57,6 @@ namespace ShortURL.Controllers
 
             await shortUrlService.IncrementTokenClicksAsync(token);
             return Redirect(shortUrlService.GetShortUrlInfoByToken(token).LongUrl);
-            //return View("ShortUrlAllStats", await shortUrlService.GetAllShortUrlsAsync());
         }
 
         public IActionResult InvalidUrl()

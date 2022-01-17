@@ -1,15 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Shortened URL";
 }
+
 <div class="jumbotron">
     <div align="center">
         <h2>Your shortened URL:</h2>
         <p>Use this link to share</p>
-        <a asp-action="RedirectByToken" asp-route-token=@ViewBag.token>@ViewBag.shortUrl</a>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="inputForCopy"  value="@ViewBag.shortUrl" readonly>
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" id="copyShortUrlButton" type="button" onclick="CopyTextToClipBoard()">
+                    Click to copy URL to clipboard
+                </button>
+            </div>
+        </div>
     </div>
 
-    <p>
-         <p>Long URL: <a href=@ViewBag.longUrl>@ViewBag.longUrl</a></p>
-        <a href="@Url.Action("Index", "Home")">Create other shortened URL.</a>
-    </p>
+    <p>Long URL: <a href=@ViewBag.longUrl>@ViewBag.longUrl</a></p>
+    <a href="@Url.Action("Index", "Home")">Create other shortened URL.</a>
 </div>
+
+<script src="~/js/CopyTextToClipBoard.js"></script>
