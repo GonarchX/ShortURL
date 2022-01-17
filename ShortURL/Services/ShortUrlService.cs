@@ -29,6 +29,8 @@ namespace ShortURL.Services
         {
             string token = "";
 
+            //Generate token by creating sequence of random symbols
+            //so different short links will be created for the same links.
             await Task.Run(() =>
             {
                 do

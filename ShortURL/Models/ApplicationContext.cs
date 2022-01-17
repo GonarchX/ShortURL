@@ -8,7 +8,7 @@ namespace ShortURL.Models
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
-            Database.EnsureCreated();   // Creating DB  on the first call
+            Database.EnsureCreated();   // Creating DB if it doesn't exist
         }
     }
 }

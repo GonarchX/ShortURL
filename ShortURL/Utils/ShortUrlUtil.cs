@@ -5,10 +5,11 @@ namespace ShortURL.Utils
 {
     public class ShortUrlUtil
     {
+        //All valid symbols for token creating 
         private const string validSymbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
         /// <summary>
-        /// Convert from long URL to short URL
+        /// Convert long URL to short URL
         /// </summary>
         /// <param name="longURL">URL for converting to short URL</param>
         /// <returns>short URL</returns>        
