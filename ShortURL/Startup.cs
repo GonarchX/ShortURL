@@ -57,6 +57,7 @@ namespace ShortURL
 
             app.UseAuthorization();
 
+            //Default enter endpoint
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -69,7 +70,8 @@ namespace ShortURL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=RedirectByToken}/{token:minlength(7)}");
+                    pattern: "{token:minlength(7)}",
+                    defaults: new { controller = "Home", action = "RedirectByToken" });
             });
         }
     }
