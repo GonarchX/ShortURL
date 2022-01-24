@@ -1,4 +1,5 @@
-﻿using ShortURL.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ShortURL.Models;
 using ShortURL.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace ShortURL.Services
         }
 
         #region IShortUrlService implementation
-        public ShortUrlInfo GetShortUrlInfoByToken(string token) =>
-            context.ShortUrlInfos.FirstOrDefault(x => x.Token == token);
+        public async Task<ShortUrlInfo> GetShortUrlInfoByTokenAsync(string token) =>
+            await context.ShortUrlInfos.FirstOrDefaultAsync(x => x.Token == token);
 
         public async Task<IEnumerable<ShortUrlInfo>> GetAllShortUrlsAsync()
             => await Task.Run(() => context.ShortUrlInfos.ToList());
@@ -43,11 +44,11 @@ namespace ShortURL.Services
         }
 
         public bool IsDuplicate(string token)
-                => GetShortUrlInfoByToken(token) != null;
+                => GetShortUrlInfoByTokenAsync(token) != null;
 
         public async Task IncrementTokenClicksAsync(string token)
         {
-            GetShortUrlInfoByToken(token).ClickNum++;
+            GetShortUrlInfoByTokenAsync(token).Result.ClickNum++;
             await context.SaveChangesAsync();
         }
 

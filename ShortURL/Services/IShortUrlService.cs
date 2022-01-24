@@ -7,11 +7,11 @@ namespace ShortURL.Services
     public interface IShortUrlService
     {
         /// <summary>
-        /// Attempts to find specified token in the specified context
+        /// Asynchronously attempts to find specified token in the specified context
         /// </summary>
         /// <param name="token">Value of short URL</param>
         /// <returns>Returns token of short URL, otherwise null</returns>
-        ShortUrlInfo GetShortUrlInfoByToken(string token);
+        Task<ShortUrlInfo> GetShortUrlInfoByTokenAsync(string token);
 
         /// <summary>
         /// Asynchronously get all values from specified context
