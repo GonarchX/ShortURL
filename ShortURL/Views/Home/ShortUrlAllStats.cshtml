@@ -5,30 +5,73 @@
 
 <h1>ShortURLStats</h1>
 
-<div class="modal-body">
-    <div>
-        <table class="table table-bordered">
-            <thead>
+
+<!--Pagination start-->
+<ol class="pagination justify-content-center">
+    <!--Start page button-->
+    <li class="page-item">
+        <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="1"><<</a>
+    </li>
+
+    <!--Prev page button-->
+    <li class="page-item">
+        <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="@(ViewBag.Pager.CurrentPage-1)"><</a>
+    </li>
+
+    <!--All available page buttons before current page-->
+    @for (int i = @ViewBag.Pager.StartPage; i < @ViewBag.Pager.CurrentPage; i++)
+    {
+        <li class="page-item">
+            <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="@i">@i</a>
+        </li>
+    }
+    <li class="page-item active">
+        <a class="page-link">@ViewBag.Pager.CurrentPage</a>
+    </li>
+
+    <!--All available page buttons after current page-->
+    @for (int i = @ViewBag.Pager.CurrentPage + 1; i <= @ViewBag.Pager.LastPage; i++)
+    {
+        <li class="page-item">
+            <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="@i">@i</a>
+        </li>
+    }
+
+    <!--Next page button-->
+    <li class="page-item">
+        <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="@(ViewBag.Pager.CurrentPage+1)">></a>
+    </li>
+
+    <!--End page button-->
+    <li class="page-item">
+        <a class="page-link" asp-controller="Home" asp-action="ShortUrlAllStats" asp-route-currentPage="@(ViewBag.Pager.TotalPages)">>></a>
+    </li>
+</ol>
+<!--Pagination end-->
+<!--Table with entries-->
+<div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Token</th>
+                <th>Long URL</th>
+                <th>Date of creation</th>
+                <th>Number of clicks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var shortUrlInfo in Model)
+            {
                 <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Token</th>
-                    <th scope="col">Long URL</th>
-                    <th scope="col">Date of creation</th>
-                    <th scope="col">Number of clicks</th>
+                    <th>@shortUrlInfo.Id</th>
+                    <td><a asp-action="RedirectByToken" asp-route-token=@shortUrlInfo.Token>@shortUrlInfo.Token</a></td>
+                    <td>@shortUrlInfo.LongUrl</td>
+                    <td>@shortUrlInfo.CreateDate</td>
+                    <td>@shortUrlInfo.ClickNum</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var shortUrlInfo in Model)
-                {
-                    <tr>
-                        <th>@shortUrlInfo.Id</th>
-                        <td><a asp-action="RedirectByToken" asp-route-token=@shortUrlInfo.Token>@shortUrlInfo.Token</a></td>
-                        <td>@shortUrlInfo.LongUrl</td>
-                        <td>@shortUrlInfo.CreateDate</td>
-                        <td>@shortUrlInfo.ClickNum</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
 </div>
+<!--End of table with entries-->

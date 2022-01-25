@@ -20,28 +20,29 @@ namespace ShortURL.Controllers
             shortUrlService = _shortUrlService;
         }
 
+        #region Controllers
         public IActionResult Index()
         {
             return View();
         }
 
-        //Creating the short URL and saving it to db
-        public async Task<IActionResult> ShortenedURL(string longUrl, int tokenLength)
+        //Creates the short URL and saving it to db
+        public IActionResult ShortenedURL(string longUrl, int tokenLength)
         {
             if (!IsValidUri(longUrl))
             {
                 return RedirectToAction("InvalidURL");
             }
 
-            string token = await shortUrlService.GenerateNonDuplTokenAsync(tokenLength);
+            string token = shortUrlService.GenerateNonDuplTokenAsync(tokenLength).Result;
 
-            //Build full url address for short url
+            //Builds full short url address
             ViewBag.shortUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/{token}";
             ViewBag.token = token;
             ViewBag.longUrl = longUrl;
 
-            //Create new ShortUrlInfo with specified data and save it to our context
-            await shortUrlService.SaveShortUrlInfoAsync(
+            //Creates new ShortUrlInfo with specified data and save it to our context
+            shortUrlService.SaveShortUrlInfoAsync(
                 new ShortUrlInfo()
                 {
                     Token = token,
@@ -53,23 +54,26 @@ namespace ShortURL.Controllers
             return View();
         }
 
-        public async Task<IActionResult> RedirectByToken(string token)
+        public IActionResult RedirectByToken(string token)
         {
             if (token == null) return RedirectToAction("InvalidUrl");
 
-            await shortUrlService.IncrementTokenClicksAsync(token);
-            return Redirect(shortUrlService.GetShortUrlInfoByToken(token).LongUrl);
+            shortUrlService.IncrementTokenClicksAsync(token);
+
+            return Redirect(shortUrlService.GetShortUrlInfoByTokenAsync(token).Result.LongUrl);
         }
 
-        public IActionResult InvalidUrl()
-        {
-            return View();
-        }
+        public IActionResult InvalidUrl() => View();
 
-        public async Task<IActionResult> ShortUrlAllStats()
+        public IActionResult ShortUrlAllStats(int currentPage = 1)
         {
-            return View(await shortUrlService.GetAllShortUrlsAsync());
+            IEnumerable<ShortUrlInfo> entriesToShow = shortUrlService.GetAllShortUrlsAsync().Result;
+            int pageSize = 50;
+            Pager pager = new Pager(entriesToShow.Count(), pageSize, currentPage);
+            ViewBag.Pager = pager;
+            return View(entriesToShow.Skip((pager.CurrentPage - 1) * pageSize).Take(pageSize));
         }
+        #endregion
 
         public bool IsValidUri(string uri) => Uri.TryCreate(uri, UriKind.Absolute, out _);
     }

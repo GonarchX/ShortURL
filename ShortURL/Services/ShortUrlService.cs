@@ -44,7 +44,7 @@ namespace ShortURL.Services
         }
 
         public bool IsDuplicate(string token)
-                => GetShortUrlInfoByTokenAsync(token) != null;
+                => GetShortUrlInfoByTokenAsync(token).Result != null;
 
         public async Task IncrementTokenClicksAsync(string token)
         {
