@@ -27,7 +27,7 @@ namespace ShortURL.Controllers
         }
 
         //Creates the short URL and saving it to db
-        public IActionResult ShortenedURL(string longUrl, int tokenLength)
+        public async Task<IActionResult> ShortenedURL(string longUrl, int tokenLength)
         {
             if (!IsValidUri(longUrl))
             {
@@ -42,7 +42,7 @@ namespace ShortURL.Controllers
             ViewBag.longUrl = longUrl;
 
             //Creates new ShortUrlInfo with specified data and save it to our context
-            shortUrlService.SaveShortUrlInfoAsync(
+            await shortUrlService.SaveShortUrlInfoAsync(
                 new ShortUrlInfo()
                 {
                     Token = token,
@@ -54,13 +54,14 @@ namespace ShortURL.Controllers
             return View();
         }
 
-        public IActionResult RedirectByToken(string token)
+        public async Task<IActionResult> RedirectByToken(string token)
         {
             if (token == null) return RedirectToAction("InvalidUrl");
 
-            shortUrlService.IncrementTokenClicksAsync(token);
-
-            return Redirect(shortUrlService.GetShortUrlInfoByTokenAsync(token).Result.LongUrl);
+            await shortUrlService.IncrementTokenClicksAsync(token);
+            var task = shortUrlService.GetShortUrlInfoByTokenAsync(token);
+            task.Wait();
+            return Redirect(task.Result.LongUrl);
         }
 
         public IActionResult InvalidUrl() => View();
